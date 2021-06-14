@@ -1,6 +1,5 @@
-package com.jb.apijb.repository;
+package com.jb.apijb.contact;
 
-import com.jb.apijb.model.Contact;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ContactRepository extends JpaRepository<Contact, Long> {

@@ -1,7 +1,6 @@
-package com.jb.apijb.controller;
+package com.jb.apijb.contact;
 
-import com.jb.apijb.model.Contact;
-import com.jb.apijb.repository.ContactRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,23 +8,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 public class ContactController {
 
-    final ContactRepository contactRepository;
-
-    public ContactController(ContactRepository contactRepository) {
-        this.contactRepository = contactRepository;
-    }
+    @Autowired
+    private ContactService contactService;
 
     @GetMapping("/contact")
-    public ResponseEntity<List<Contact>> getInformationsContactPage() {
+    public ResponseEntity<Contact> getInformationsContactPage() {
         try {
-            List<Contact> contact = contactRepository.findAll();
+            Contact contact = contactService.getInformationsContactPage();
 
-            if (contact.isEmpty()) {
+            if (contact == null) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
@@ -38,8 +32,8 @@ public class ContactController {
     @PostMapping("/contact")
     public ResponseEntity<Contact> createInformationsContactPage(@RequestBody Contact contact) {
         try {
-            Contact newContact = contactRepository.save(new Contact(contact.getAddress(), contact.getPhoneNumber(), contact.getEmail(), contact.getLinkedinUrl(), contact.getGitlabUrl(), contact.getGithubUrl()));
-            return new ResponseEntity<>(newContact, HttpStatus.CREATED);
+            contactService.createInformationsContactPage(contact);
+            return new ResponseEntity<>(null, HttpStatus.CREATED);
         } catch (Exception exception) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -1,7 +1,6 @@
-package com.jb.apijb.controller;
+package com.jb.apijb.menu;
 
-import com.jb.apijb.model.Menu;
-import com.jb.apijb.repository.MenuRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,23 +8,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 public class MenuController {
 
-    final MenuRepository menuRepository;
-
-    public MenuController(MenuRepository menuRepository) {
-        this.menuRepository = menuRepository;
-    }
+    @Autowired
+    private MenuService menuService;
 
     @GetMapping("/menu")
-    public ResponseEntity<List<Menu>> getInformationsMenu() {
+    public ResponseEntity<Menu> getInformationsMenu() {
         try {
-            List<Menu> menu = menuRepository.findAll();
+            Menu menu = menuService.getInformationsMenuPage();
 
-            if (menu.isEmpty()) {
+            if (menu == null) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
@@ -38,8 +32,8 @@ public class MenuController {
     @PostMapping("/menu")
     public ResponseEntity<Menu> createInformationsMenu(@RequestBody Menu menu) {
         try {
-            Menu newMenu = menuRepository.save(new Menu(menu.getTitle(), menu.getNavItem1(), menu.getNavItem2(), menu.getNavItem3(), menu.getNavItem4(), menu.getNavItem5(), menu.getLinkedinUrl(), menu.getGithubUrl()));
-            return new ResponseEntity<>(newMenu, HttpStatus.CREATED);
+            menuService.createInformationsMenuPage(menu);
+            return new ResponseEntity<>(null, HttpStatus.CREATED);
         } catch (Exception exception) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -1,6 +1,5 @@
-package com.jb.apijb.repository;
+package com.jb.apijb.home;
 
-import com.jb.apijb.model.Home;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface HomeRepository extends JpaRepository<Home, Long> {

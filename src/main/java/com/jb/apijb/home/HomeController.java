@@ -1,7 +1,6 @@
-package com.jb.apijb.controller;
+package com.jb.apijb.home;
 
-import com.jb.apijb.model.Home;
-import com.jb.apijb.repository.HomeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,22 +9,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class HomeController {
 
-    final HomeRepository homeRepository;
-
-    public HomeController(HomeRepository homeRepository) {
-        this.homeRepository = homeRepository;
-    }
+    @Autowired
+    private HomeService homeService;
 
     @GetMapping("/home")
-    public ResponseEntity<List<Home>> getInformationsHomePage() {
+    public ResponseEntity<Home> getInformationsHomePage() {
         try {
-            List<Home> home = homeRepository.findAll();
+            Home home = homeService.getInformationsHomePage();
 
-            if (home.isEmpty()) {
+            if (home == null) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
@@ -38,8 +35,8 @@ public class HomeController {
     @PostMapping("/home")
     public ResponseEntity<Home> createInformationsHomePage(@RequestBody Home home) {
         try {
-            Home newHome = homeRepository.save(new Home(home.getName(), home.getJob(), home.getActualJob()));
-            return new ResponseEntity<>(newHome, HttpStatus.CREATED);
+            homeService.createInformationsHomePage(home);
+            return new ResponseEntity<>(null, HttpStatus.CREATED);
         } catch (Exception exception) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
