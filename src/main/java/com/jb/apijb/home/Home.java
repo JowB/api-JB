@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class Home {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "name")
@@ -29,7 +29,8 @@ public class Home {
     @Column(name = "user_id")
     private int userId;
 
-    public Home() {}
+    public Home() {
+    }
 
     public Home(String name, String job, String actualJob, int userId) {
         this.name = name;

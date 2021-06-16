@@ -1,4 +1,4 @@
-package com.jb.apijb.home;
+package com.jb.apijb.message;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,31 +8,33 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
-public class HomeController {
+public class MessageController {
 
     @Autowired
-    private HomeService homeService;
+    private MessageService messageService;
 
-    @GetMapping("/home")
-    public ResponseEntity<Home> getInformationsHomePage() {
+    @GetMapping("/messages")
+    public ResponseEntity<List<Message>> getAllMessages() {
         try {
-            Home home = homeService.getInformationsHomePage();
+            List<Message> messageList = messageService.getAllMessages();
 
-            if (home == null) {
+            if (messageList.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            return new ResponseEntity<>(home, HttpStatus.OK);
+            return new ResponseEntity<>(messageList, HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PostMapping("/home")
-    public ResponseEntity<Home> createInformationsHomePage(@RequestBody Home home) {
+    @PostMapping("/messages")
+    public ResponseEntity<Message> createMessage(@RequestBody Message message) {
         try {
-            homeService.createInformationsHomePage(home);
+            messageService.createMessage(message);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

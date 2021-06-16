@@ -1,4 +1,4 @@
-package com.jb.apijb.home;
+package com.jb.apijb.project;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,31 +8,33 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
-public class HomeController {
+public class ProjectController {
 
     @Autowired
-    private HomeService homeService;
+    private ProjectService projectService;
 
-    @GetMapping("/home")
-    public ResponseEntity<Home> getInformationsHomePage() {
+    @GetMapping("/projects")
+    public ResponseEntity<List<Project>> getAllProjects() {
         try {
-            Home home = homeService.getInformationsHomePage();
+            List<Project> projectList = projectService.getAllProjects();
 
-            if (home == null) {
+            if (projectList.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            return new ResponseEntity<>(home, HttpStatus.OK);
+            return new ResponseEntity<>(projectList, HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PostMapping("/home")
-    public ResponseEntity<Home> createInformationsHomePage(@RequestBody Home home) {
+    @PostMapping("/project")
+    public ResponseEntity<Project> createProject(@RequestBody Project project) {
         try {
-            homeService.createInformationsHomePage(home);
+            projectService.createProject(project);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

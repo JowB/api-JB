@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class Contact {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "address")
@@ -26,23 +26,11 @@ public class Contact {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "linkedin_url")
-    private String linkedinUrl;
-
-    @Column(name = "gitlab_url")
-    private String gitlabUrl;
-
-    @Column(name = "github_url")
-    private String githubUrl;
-
     public Contact() {}
 
-    public Contact(String address, String phoneNumber, String email, String linkedinUrl, String gitlabUrl, String githubUrl) {
+    public Contact(String address, String phoneNumber, String email) {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.linkedinUrl = linkedinUrl;
-        this.gitlabUrl = gitlabUrl;
-        this.githubUrl = githubUrl;
     }
 }

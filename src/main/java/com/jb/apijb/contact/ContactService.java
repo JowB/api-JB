@@ -19,6 +19,6 @@ public class ContactService {
     }
 
     public void createInformationsContactPage(Contact contact) {
-        contactRepository.save(new Contact(contact.getAddress(), contact.getPhoneNumber(), contact.getEmail(), contact.getLinkedinUrl(), contact.getGitlabUrl(), contact.getGithubUrl()));
+        contactRepository.save(new Contact(contact.getAddress(), contact.getPhoneNumber(), contact.getEmail()));
     }
 }

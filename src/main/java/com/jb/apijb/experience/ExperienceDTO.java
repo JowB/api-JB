@@ -1,4 +1,4 @@
-package com.jb.apijb.contact;
+package com.jb.apijb.experience;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,10 +11,13 @@ import lombok.experimental.Accessors;
 @ToString
 @NoArgsConstructor
 @Accessors(chain = true)
-public class ContactDTO {
+public class ExperienceDTO {
 
     private long id;
-    private String address;
-    private String phoneNumber;
-    private String email;
+    private String job;
+    private String company;
+    private String yearStart;
+    private String yearEnd;
+    private String languages;
+    private String description;
 }

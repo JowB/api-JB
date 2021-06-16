@@ -1,4 +1,4 @@
-package com.jb.apijb.contact;
+package com.jb.apijb.message;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,10 +11,9 @@ import lombok.experimental.Accessors;
 @ToString
 @NoArgsConstructor
 @Accessors(chain = true)
-public class ContactDTO {
+public class MessageDTO {
 
     private long id;
-    private String address;
-    private String phoneNumber;
     private String email;
+    private String content;
 }
