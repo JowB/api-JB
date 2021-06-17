@@ -19,6 +19,18 @@ public class MenuService {
     }
 
     public void createInformationsMenuPage(Menu menu) {
-        menuRepository.save(new Menu(menu.getTitle(), menu.getNavItem1(), menu.getNavItem2(), menu.getNavItem3(), menu.getNavItem4(), menu.getNavItem5(), menu.getLinkedinUrl(), menu.getGithubUrl()));
+        menuRepository.save(new Menu(menu.getLogo(), menu.getNavItem1(), menu.getNavItem2(), menu.getNavItem3(), menu.getNavItem4(), menu.getNavItem5()));
+    }
+
+    public Menu updateMenu(Menu menu) {
+        return menuRepository.save(menu);
+    }
+
+    public Optional<Menu> findMenu(long id) {
+        return menuRepository.findById(id);
+    }
+
+    public void deleteMenu(long id) {
+        menuRepository.deleteById(id);
     }
 }
