@@ -18,4 +18,8 @@ public class MessageService {
     public void createMessage(Message message) {
         messageRepository.save(new Message(message.getEmail(), message.getContent()));
     }
+
+    public void deleteMessage(long id) {
+        messageRepository.deleteById(id);
+    }
 }
