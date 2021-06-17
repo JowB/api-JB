@@ -21,4 +21,16 @@ public class HomeService {
     public void createInformationsHomePage(Home home) {
         homeRepository.save(new Home(home.getName(), home.getJob(), home.getActualJob()));
     }
+
+    public Home updateHome(Home home) {
+        return homeRepository.save(home);
+    }
+
+    public Optional<Home> findHome(long id) {
+        return homeRepository.findById(id);
+    }
+
+    public void deleteHome(long id) {
+        homeRepository.deleteById(id);
+    }
 }

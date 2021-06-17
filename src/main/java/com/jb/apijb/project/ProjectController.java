@@ -59,9 +59,9 @@ public class ProjectController {
                 Project updatedProject = projectService.updateProject(_project);
 
                 return new ResponseEntity<>(updatedProject, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
+
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
