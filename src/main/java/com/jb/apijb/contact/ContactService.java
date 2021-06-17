@@ -21,4 +21,16 @@ public class ContactService {
     public void createInformationsContactPage(Contact contact) {
         contactRepository.save(new Contact(contact.getAddress(), contact.getPhoneNumber(), contact.getEmail()));
     }
+
+    public Contact updateContact(Contact contact) {
+        return contactRepository.save(contact);
+    }
+
+    public Optional<Contact> findContact(long id) {
+        return contactRepository.findById(id);
+    }
+
+    public void deleteContact(long id) {
+        contactRepository.deleteById(id);
+    }
 }
