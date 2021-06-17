@@ -26,16 +26,12 @@ public class Home {
     @Column(name = "actual_job")
     private String actualJob;
 
-    @Column(name = "user_id")
-    private int userId;
-
     public Home() {
     }
 
-    public Home(String name, String job, String actualJob, int userId) {
+    public Home(String name, String job, String actualJob) {
         this.name = name;
         this.job = job;
         this.actualJob = actualJob;
-        this.userId = userId;
     }
 }

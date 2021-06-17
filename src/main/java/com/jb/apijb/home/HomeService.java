@@ -19,6 +19,6 @@ public class HomeService {
     }
 
     public void createInformationsHomePage(Home home) {
-        homeRepository.save(new Home(home.getName(), home.getJob(), home.getActualJob(), home.getUserId()));
+        homeRepository.save(new Home(home.getName(), home.getJob(), home.getActualJob()));
     }
 }

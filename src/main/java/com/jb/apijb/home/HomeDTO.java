@@ -17,5 +17,4 @@ public class HomeDTO {
     private String name;
     private String job;
     private String actualJob;
-    private int userId;
 }
