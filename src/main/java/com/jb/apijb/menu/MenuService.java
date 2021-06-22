@@ -1,5 +1,6 @@
 package com.jb.apijb.menu;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,8 +9,13 @@ import java.util.Optional;
 @Service
 public class MenuService {
 
-    @Autowired
-    private MenuRepository menuRepository;
+    private final MenuRepository menuRepository;
+    private final ModelMapper modelMapper;
+
+    public MenuService(final MenuRepository menuRepository, final ModelMapper modelMapper) {
+        this.menuRepository = menuRepository;
+        this.modelMapper = modelMapper;
+    }
 
     public Menu getInformationsMenuPage() {
         long id = 4;
@@ -32,5 +38,13 @@ public class MenuService {
 
     public void deleteMenu(long id) {
         menuRepository.deleteById(id);
+    }
+
+    private Menu mapToEntity(MenuDTO menuDTO) {
+        return modelMapper.map(menuDTO, Menu.class);
+    }
+
+    private MenuDTO mapToDto(Menu menu) {
+        return modelMapper.map(menu, MenuDTO.class);
     }
 }

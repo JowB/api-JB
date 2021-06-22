@@ -26,7 +26,7 @@ public class Project {
     @Column(name = "date")
     private String date;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "picture_1")
@@ -45,17 +45,5 @@ public class Project {
     private String technologies;
 
     public Project() {
-    }
-
-    public Project(String miniature, String name, String date, String description, String picture1, String picture2, String picture3, String picture4, String technologies) {
-        this.miniature = miniature;
-        this.name = name;
-        this.date = date;
-        this.description = description;
-        this.picture1 = picture1;
-        this.picture2 = picture2;
-        this.picture3 = picture3;
-        this.picture4 = picture4;
-        this.technologies = technologies;
     }
 }

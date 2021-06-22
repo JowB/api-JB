@@ -10,7 +10,6 @@ import lombok.experimental.Accessors;
 @Setter
 @ToString
 @NoArgsConstructor
-@Accessors(chain = true)
 public class ProjectDTO {
 
     private long id;

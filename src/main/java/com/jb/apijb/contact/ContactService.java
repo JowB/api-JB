@@ -1,5 +1,6 @@
 package com.jb.apijb.contact;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,8 +9,13 @@ import java.util.Optional;
 @Service
 public class ContactService {
 
-    @Autowired
-    private ContactRepository contactRepository;
+    private final ContactRepository contactRepository;
+    private final ModelMapper modelMapper;
+
+    public ContactService(final ContactRepository contactRepository, final ModelMapper modelMapper) {
+        this.contactRepository = contactRepository;
+        this.modelMapper = modelMapper;
+    }
 
     public Contact getInformationsContactPage() {
         long id = 5;
@@ -32,5 +38,13 @@ public class ContactService {
 
     public void deleteContact(long id) {
         contactRepository.deleteById(id);
+    }
+
+    private Contact mapToEntity(ContactDTO contactDTO) {
+        return modelMapper.map(contactDTO, Contact.class);
+    }
+
+    private ContactDTO mapToDto(Contact contact) {
+        return modelMapper.map(contact, ContactDTO.class);
     }
 }

@@ -29,36 +29,21 @@ public class ExperienceController {
         }
     }
 
-    @PostMapping("/experiences")
-    public ResponseEntity<Experience> createExperience(@RequestBody Experience experience) {
+    @GetMapping("/experiences/{id}")
+    public ResponseEntity<Experience> getExperienceById(@PathVariable("id") long id) {
         try {
-            experienceService.createExperience(experience);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            Optional<Experience> experienceOptional = experienceService.getExperienceById(id);
+
+            return experienceOptional.map(experience -> new ResponseEntity<>(experience, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PutMapping("/experiences/{id}")
-    public ResponseEntity<Experience> updateExperience(@PathVariable("id") long id, @RequestBody Experience experience) {
+    @PostMapping("/experiences")
+    public ResponseEntity<ExperienceDTO> createExperience(@RequestBody ExperienceDTO experienceDTO) {
         try {
-            Optional<Experience> experienceOptional = experienceService.findExperience(id);
-
-            if (experienceOptional.isPresent()) {
-                Experience _experience = experienceOptional.get();
-                _experience.setJob(experience.getJob());
-                _experience.setCompany(experience.getCompany());
-                _experience.setYearStart(experience.getYearStart());
-                _experience.setYearEnd(experience.getYearEnd());
-                _experience.setLanguages(experience.getLanguages());
-                _experience.setDescription(experience.getDescription());
-
-                Experience updatedExperience = experienceService.updateExperience(_experience);
-
-                return new ResponseEntity<>(updatedExperience, HttpStatus.OK);
-            }
-
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.OK).body(experienceService.upsertExperience(experienceDTO));
         } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

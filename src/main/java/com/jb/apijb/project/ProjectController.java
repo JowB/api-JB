@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class ProjectController {
 
@@ -29,39 +30,22 @@ public class ProjectController {
         }
     }
 
-    @PostMapping("/projects")
-    public ResponseEntity<Project> createProject(@RequestBody Project project) {
+    @GetMapping("/projects/{id}")
+    public ResponseEntity<Project> getProjectById(@PathVariable("id") long id) {
         try {
-            projectService.createProject(project);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            Optional<Project> projectOptional = projectService.getProjectById(id);
+
+            return projectOptional.map(project -> new ResponseEntity<>(project, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
         } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PutMapping("/projects/{id}")
-    public ResponseEntity<Project> updateProject(@PathVariable("id") long id, @RequestBody Project project) {
+    @PostMapping("/projects")
+    public ResponseEntity<ProjectDTO> createProject(@RequestBody ProjectDTO project) {
         try {
-            Optional<Project> projectOptional = projectService.findProject(id);
-
-            if (projectOptional.isPresent()) {
-                Project _project = projectOptional.get();
-                _project.setMiniature(project.getMiniature());
-                _project.setName(project.getName());
-                _project.setDate(project.getDate());
-                _project.setDescription(project.getDescription());
-                _project.setPicture1(project.getPicture1());
-                _project.setPicture2(project.getPicture2());
-                _project.setPicture3(project.getPicture3());
-                _project.setPicture4(project.getPicture4());
-                _project.setTechnologies(project.getTechnologies());
-
-                Project updatedProject = projectService.updateProject(_project);
-
-                return new ResponseEntity<>(updatedProject, HttpStatus.OK);
-            }
-
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.OK).body(projectService.upsertProject(project));
         } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
