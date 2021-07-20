@@ -7,32 +7,36 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class MessageController {
 
+    private final MessageService messageService;
+
     @Autowired
-    private MessageService messageService;
+    public MessageController(final MessageService messageService) {
+        this.messageService = messageService;
+    }
 
     @GetMapping("/messages")
-    public ResponseEntity<List<Message>> getAllMessages() {
+    public ResponseEntity<List<MessageDTO>> getAllMessages() {
         try {
-            List<Message> messageList = messageService.getAllMessages();
+            List<MessageDTO> messageDTOList = messageService.getAllMessages();
 
-            if (messageList.isEmpty()) {
+            if (messageDTOList.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            return new ResponseEntity<>(messageList, HttpStatus.OK);
+            return new ResponseEntity<>(messageDTOList, HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("/messages")
-    public ResponseEntity<Message> createMessage(@RequestBody Message message) {
+    public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageDTO messageDTO) {
         try {
-            messageService.createMessage(message);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return ResponseEntity.status(HttpStatus.OK).body(messageService.upsertMessage(messageDTO));
         } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -1,4 +1,4 @@
-package com.jb.apijb.page;
+package com.jb.apijb.study;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,10 +9,11 @@ import lombok.ToString;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PageDTO {
+public class StudyDTO {
 
     private long id;
-    private String title;
-    private String subTitle;
-    private String description;
+    private String year;
+    private String logo;
+    private String diploma;
+    private String secondDiploma;
 }

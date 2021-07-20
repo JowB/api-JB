@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectService {
@@ -20,14 +21,19 @@ public class ProjectService {
     }
 
     /**
-     * Get all the projects
+     * Récupère la liste des projets
+     *
+     * @return list projectDto
      */
-    public List<Project> getAllProjects() {
-        return projectRepository.findAll();
+    public List<ProjectDTO> getAllProjects() {
+        return this.mapListToDto(projectRepository.findAll());
     }
 
     /**
-     * Get one project by id
+     * Récupère un projet en fonction de son id
+     *
+     * @param id project id
+     * @return optional project
      */
     public Optional<Project> getProjectById(Long id) {
         return projectRepository.findById(id);
@@ -44,15 +50,23 @@ public class ProjectService {
     }
 
     /**
-     * Find project by id
+     * Récupère un project en fonction de son id
+     *
+     * @param id project id
+     * @return projectDto {@link ProjectDTO}
+     * @throws ProjectException exception {@link ProjectException}
      */
-    public ProjectDTO findProject(long id) throws ProjectException{
+    /**public ProjectDTO findProject(long id) throws ProjectException{
 
         Optional<Project> optionalProjet = projectRepository.findById(id);
 
         return this.mapToDto(optionalProjet.orElseThrow(() -> new ProjectException("Aucun projet trouvé avec l'id "+id)));
-    }
+    }**/
 
+    /**
+     * Supprime un project en fonction de son id
+     * @param id project id
+     */
     public void deleteProject(long id) {
         projectRepository.deleteById(id);
     }
@@ -63,5 +77,12 @@ public class ProjectService {
 
     private ProjectDTO mapToDto(Project project) {
         return modelMapper.map(project, ProjectDTO.class);
+    }
+
+    private List<ProjectDTO> mapListToDto(List<Project> projectList) {
+        return projectList
+                .stream()
+                .map(element -> modelMapper.map(element, ProjectDTO.class))
+                .collect(Collectors.toList());
     }
 }

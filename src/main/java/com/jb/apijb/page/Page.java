@@ -17,11 +17,12 @@ public class Page {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "sub_title")
     private String subTitle;
 
-    public Page() {}
+    @Column(name = "description", nullable = false)
+    private String description;
 }

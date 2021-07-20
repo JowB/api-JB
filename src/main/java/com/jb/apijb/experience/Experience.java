@@ -17,33 +17,21 @@ public class Experience {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "job")
+    @Column(name = "job", nullable = false)
     private String job;
 
-    @Column(name = "company")
+    @Column(name = "company", nullable = false)
     private String company;
 
-    @Column(name = "year_start")
+    @Column(name = "year_start", nullable = false)
     private String yearStart;
 
-    @Column(name = "year_end")
+    @Column(name = "year_end", nullable = false)
     private String yearEnd;
 
-    @Column(name = "languages")
+    @Column(name = "languages", nullable = false)
     private String languages;
 
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     private String description;
-
-    public Experience() {
-    }
-
-    public Experience(String job, String company, String yearStart, String yearEnd, String languages, String description) {
-        this.job = job;
-        this.company = company;
-        this.yearStart = yearStart;
-        this.yearEnd = yearEnd;
-        this.languages = languages;
-        this.description = description;
-    }
 }

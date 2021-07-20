@@ -8,22 +8,27 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class ExperienceController {
 
+    private final ExperienceService experienceService;
+
     @Autowired
-    private ExperienceService experienceService;
+    public ExperienceController(final ExperienceService experienceService) {
+        this.experienceService = experienceService;
+    }
 
     @GetMapping("/experiences")
-    public ResponseEntity<List<Experience>> getExperiences() {
+    public ResponseEntity<List<ExperienceDTO>> getExperiences() {
         try {
-            List<Experience> experienceList = experienceService.getAllExperiences();
+            List<ExperienceDTO> experienceDTOList = experienceService.getAllExperiences();
 
-            if (experienceList.isEmpty()) {
+            if (experienceDTOList.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            return new ResponseEntity<>(experienceList, HttpStatus.OK);
+            return new ResponseEntity<>(experienceDTOList, HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

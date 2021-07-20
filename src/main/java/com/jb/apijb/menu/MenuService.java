@@ -4,7 +4,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MenuService {
@@ -12,30 +14,46 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final ModelMapper modelMapper;
 
+    @Autowired
     public MenuService(final MenuRepository menuRepository, final ModelMapper modelMapper) {
         this.menuRepository = menuRepository;
         this.modelMapper = modelMapper;
     }
 
-    public Menu getInformationsMenuPage() {
-        long id = 4;
-        Optional<Menu> menuResponse = menuRepository.findById(id);
-
-        return menuResponse.get();
+    /**
+     * Récupère la liste de tout les items
+     *
+     * @return list menuDTO
+     */
+    public List<MenuDTO> getAll() {
+        return this.mapListToDto(menuRepository.findAll());
     }
 
-    public void createInformationsMenuPage(Menu menu) {
-        menuRepository.save(new Menu(menu.getLogo(), menu.getNavItem1(), menu.getNavItem2(), menu.getNavItem3(), menu.getNavItem4(), menu.getNavItem5()));
-    }
-
-    public Menu updateMenu(Menu menu) {
-        return menuRepository.save(menu);
-    }
-
-    public Optional<Menu> findMenu(long id) {
+    /**
+     * Récupère un élément du menu en fonction de son id
+     *
+     * @param id menu id
+     * @return optional menu
+     */
+    public Optional<Menu> getElementOfMenuById(long id) {
         return menuRepository.findById(id);
     }
 
+    /**
+     * Permet de faire aussi bien l'ajout que la modification en BDD
+     *
+     * @param menuDTO {@link MenuDTO}
+     * @return menuDTO {@link MenuDTO}
+     */
+    public MenuDTO upsertMenu(MenuDTO menuDTO) {
+        return this.mapToDto(menuRepository.save(this.mapToEntity(menuDTO)));
+    }
+
+    /**
+     * Supprime un élément du menu en fonction de son id
+     *
+     * @param id menu id
+     */
     public void deleteMenu(long id) {
         menuRepository.deleteById(id);
     }
@@ -46,5 +64,12 @@ public class MenuService {
 
     private MenuDTO mapToDto(Menu menu) {
         return modelMapper.map(menu, MenuDTO.class);
+    }
+
+    private List<MenuDTO> mapListToDto(List<Menu> menuList) {
+        return menuList
+                .stream()
+                .map(element -> modelMapper.map(element, MenuDTO.class))
+                .collect(Collectors.toList());
     }
 }

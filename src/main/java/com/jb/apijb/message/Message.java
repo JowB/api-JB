@@ -17,17 +17,9 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "content")
+    @Column(name = "content", nullable = false)
     private String content;
-
-    public Message() {
-    }
-
-    public Message(String email, String content) {
-        this.email = email;
-        this.content = content;
-    }
 }

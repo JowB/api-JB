@@ -1,13 +1,14 @@
 package com.jb.apijb.page;
 
-import com.jb.apijb.project.Project;
-import com.jb.apijb.project.ProjectDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PageService {
@@ -24,20 +25,32 @@ public class PageService {
     /**
      * Retourne la liste de toutes les pages.
      *
-     * @return list page
+     * @return list pageDto
      */
-    public List<Page> getAllPages() {
-        return pageRepository.findAll();
+    public List<PageDTO> getAllPages() {
+        return this.mapListToDto(pageRepository.findAll());
     }
 
     /**
      * Retourne une page en fonction de son id.
      *
      * @param id page id
-     * @return optional Page
+     * @return ResponseEntity
      */
-    public Optional<Page> getPageById(Long id) {
-        return pageRepository.findById(id);
+    public ResponseEntity<PageDTO> getPageById(Long id) {
+        try {
+            Optional<Page> optionalPage = pageRepository.findById(id);
+
+            if (optionalPage.isPresent()) {
+                PageDTO pageDTO = this.mapToDto(optionalPage.get());
+
+                return new ResponseEntity<>(pageDTO, HttpStatus.OK);
+            }
+
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception exception) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -65,5 +78,12 @@ public class PageService {
 
     private PageDTO mapToDto(Page page) {
         return modelMapper.map(page, PageDTO.class);
+    }
+
+    private List<PageDTO> mapListToDto(List<Page> pageList) {
+        return pageList
+                .stream()
+                .map(element -> modelMapper.map(element, PageDTO.class))
+                .collect(Collectors.toList());
     }
 }

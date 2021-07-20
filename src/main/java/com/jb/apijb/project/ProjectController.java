@@ -12,19 +12,23 @@ import java.util.Optional;
 @RestController
 public class ProjectController {
 
+    private final ProjectService projectService;
+
     @Autowired
-    private ProjectService projectService;
+    public ProjectController(final ProjectService projectService) {
+        this.projectService = projectService;
+    }
 
     @GetMapping("/projects")
-    public ResponseEntity<List<Project>> getAllProjects() {
+    public ResponseEntity<List<ProjectDTO>> getAllProjects() {
         try {
-            List<Project> projectList = projectService.getAllProjects();
+            List<ProjectDTO> projectDTOList = projectService.getAllProjects();
 
-            if (projectList.isEmpty()) {
+            if (projectDTOList.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            return new ResponseEntity<>(projectList, HttpStatus.OK);
+            return new ResponseEntity<>(projectDTOList, HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -43,9 +47,9 @@ public class ProjectController {
     }
 
     @PostMapping("/projects")
-    public ResponseEntity<ProjectDTO> createProject(@RequestBody ProjectDTO project) {
+    public ResponseEntity<ProjectDTO> upsertProject(@RequestBody ProjectDTO projectDTO) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(projectService.upsertProject(project));
+            return ResponseEntity.status(HttpStatus.OK).body(projectService.upsertProject(projectDTO));
         } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

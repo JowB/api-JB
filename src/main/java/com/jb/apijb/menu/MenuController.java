@@ -5,59 +5,50 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class MenuController {
 
+    private final MenuService menuService;
+
     @Autowired
-    private MenuService menuService;
+    public MenuController(final MenuService menuService) {
+        this.menuService = menuService;
+    }
 
     @GetMapping("/menu")
-    public ResponseEntity<Menu> getInformationsMenu() {
+    public ResponseEntity<List<MenuDTO>> getAllItemsFromMenu() {
         try {
-            Menu menu = menuService.getInformationsMenuPage();
+            List<MenuDTO> menuDTOList = menuService.getAll();
 
-            if (menu == null) {
+            if (menuDTOList.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            return new ResponseEntity<>(menu, HttpStatus.OK);
+            return new ResponseEntity<>(menuDTOList, HttpStatus.OK);
         } catch (Exception exception) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/menu/{id}")
+    public ResponseEntity<Menu> getItemFromMenuById(@PathVariable("id") long id) {
+        try {
+            Optional<Menu> menuOptional = menuService.getElementOfMenuById(id);
+
+            return menuOptional.map(item -> new ResponseEntity<>(item, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception exception) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("/menu")
-    public ResponseEntity<Menu> createInformationsMenu(@RequestBody Menu menu) {
+    public ResponseEntity<MenuDTO> upsertItemForMenu(@RequestBody MenuDTO menuDTO) {
         try {
-            menuService.createInformationsMenuPage(menu);
-            return new ResponseEntity<>(null, HttpStatus.CREATED);
-        } catch (Exception exception) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @PutMapping("/menu/{id}")
-    public ResponseEntity<Menu> updateMenu(@PathVariable("id") long id, @RequestBody Menu menu) {
-        try {
-            Optional<Menu> menuOptional = menuService.findMenu(id);
-
-            if (menuOptional.isPresent()) {
-                Menu _menu = menuOptional.get();
-                _menu.setLogo(menu.getLogo());
-                _menu.setNavItem1(menu.getNavItem1());
-                _menu.setNavItem2(menu.getNavItem2());
-                _menu.setNavItem3(menu.getNavItem3());
-                _menu.setNavItem4(menu.getNavItem4());
-                _menu.setNavItem5(menu.getNavItem5());
-
-                Menu updatedMenu = menuService.updateMenu(_menu);
-
-                return new ResponseEntity<>(updatedMenu, HttpStatus.OK);
-            }
-
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.OK).body(menuService.upsertMenu(menuDTO));
         } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

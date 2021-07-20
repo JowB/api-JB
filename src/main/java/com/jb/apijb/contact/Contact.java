@@ -17,20 +17,6 @@ public class Contact {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "address")
-    private String address;
-
-    @Column(name = "phone_number")
-    private String phoneNumber;
-
-    @Column(name = "email")
-    private String email;
-
-    public Contact() {}
-
-    public Contact(String address, String phoneNumber, String email) {
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-    }
+    @Column(name = "item", nullable = false)
+    private String item;
 }

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MessageService {
@@ -13,19 +14,37 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final ModelMapper modelMapper;
 
+    @Autowired
     public MessageService(final MessageRepository messageRepository, final ModelMapper modelMapper) {
         this.messageRepository = messageRepository;
         this.modelMapper = modelMapper;
     }
 
-    public List<Message> getAllMessages() {
-        return messageRepository.findAll();
+    /**
+     * Récupère la liste des messages
+     *
+     * @return list messageDto {@link MessageDTO}
+     */
+    public List<MessageDTO> getAllMessages() {
+        return this.mapListToDto(messageRepository.findAll());
     }
 
-    public void createMessage(Message message) {
-        messageRepository.save(message);
+
+    /**
+     * Permet de faire aussi bien l'insert que l'update en bdd
+     *
+     * @param messageDTO {@link MessageDTO}
+     * @return messageDTO from database {@link MessageDTO}
+     */
+    public MessageDTO upsertMessage(MessageDTO messageDTO) {
+        return this.mapToDto(messageRepository.save(this.mapToEntity(messageDTO)));
     }
 
+    /**
+     * Supprimer un message en fonction de son id
+     *
+     * @param id message id
+     */
     public void deleteMessage(long id) {
         messageRepository.deleteById(id);
     }
@@ -36,5 +55,12 @@ public class MessageService {
 
     private MessageDTO mapToDto(Message message) {
         return modelMapper.map(message, MessageDTO.class);
+    }
+
+    private List<MessageDTO> mapListToDto(List<Message> messageList) {
+        return messageList
+                .stream()
+                .map(element -> modelMapper.map(element, MessageDTO.class))
+                .collect(Collectors.toList());
     }
 }

@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.experimental.Accessors;
 
 @Getter
 @Setter
@@ -22,4 +21,5 @@ public class ProjectDTO {
     private String picture3;
     private String picture4;
     private String technologies;
+    private String link;
 }

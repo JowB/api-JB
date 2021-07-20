@@ -17,33 +17,33 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "miniature")
+    @Column(name = "miniature", nullable = false)
     private String miniature;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "date")
+    @Column(name = "date", nullable = false)
     private String date;
 
-    @Column(name = "description", columnDefinition = "TEXT")
+    @Column(name = "description", columnDefinition = "TEXT", nullable = false)
     private String description;
 
-    @Column(name = "picture_1")
+    @Column(name = "picture_1", nullable = false)
     private String picture1;
 
-    @Column(name = "picture_2")
+    @Column(name = "picture_2", nullable = false)
     private String picture2;
 
-    @Column(name = "picture_3")
+    @Column(name = "picture_3", nullable = false)
     private String picture3;
 
-    @Column(name = "picture_4")
+    @Column(name = "picture_4", nullable = false)
     private String picture4;
 
-    @Column(name = "technologies")
+    @Column(name = "technologies", nullable = false)
     private String technologies;
 
-    public Project() {
-    }
+    @Column(name = "link")
+    private String link;
 }
