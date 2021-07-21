@@ -1,12 +1,10 @@
 package com.jb.apijb.page;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -14,7 +12,6 @@ public class PageController {
 
     private final PageService pageService;
 
-    @Autowired
     public PageController(final PageService pageService) {
         this.pageService = pageService;
     }

@@ -1,6 +1,7 @@
 package com.jb.apijb.menu;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @ToString
 @Getter
 @Setter
+@NoArgsConstructor
 public class Menu {
 
     @Id

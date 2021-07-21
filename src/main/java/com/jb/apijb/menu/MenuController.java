@@ -1,6 +1,5 @@
 package com.jb.apijb.menu;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +13,6 @@ public class MenuController {
 
     private final MenuService menuService;
 
-    @Autowired
     public MenuController(final MenuService menuService) {
         this.menuService = menuService;
     }

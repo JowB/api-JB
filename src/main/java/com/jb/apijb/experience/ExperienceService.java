@@ -1,23 +1,20 @@
 package com.jb.apijb.experience;
 
+import com.jb.apijb.generic.GenericMappingService;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
-public class ExperienceService {
+public class ExperienceService extends GenericMappingService<ExperienceDTO, Experience> {
 
     private final ExperienceRepository experienceRepository;
-    private final ModelMapper modelMapper;
 
-    @Autowired
     public ExperienceService(final ExperienceRepository experienceRepository, final ModelMapper modelMapper) {
+        super(modelMapper);
         this.experienceRepository = experienceRepository;
-        this.modelMapper = modelMapper;
     }
 
     /**
@@ -26,7 +23,7 @@ public class ExperienceService {
      * @return list of experience from database {@link List<ExperienceDTO>}
      */
     public List<ExperienceDTO> getAllExperiences() {
-        return this.mapListToDto(experienceRepository.findAll());
+        return this.mapListToDto(experienceRepository.findAll(), ExperienceDTO.class);
     }
 
     /**
@@ -46,25 +43,10 @@ public class ExperienceService {
      * @return experienceDTO from database {@link ExperienceDTO}
      */
     public ExperienceDTO upsertExperience(ExperienceDTO experienceDTO) {
-        return mapToDto(experienceRepository.save(mapToEntity(experienceDTO)));
+        return mapToDto(experienceRepository.save(mapToEntity(experienceDTO, Experience.class)), ExperienceDTO.class);
     }
 
     public void deleteExperience(long id) {
         experienceRepository.deleteById(id);
-    }
-
-    private Experience mapToEntity(ExperienceDTO experienceDTO) {
-        return modelMapper.map(experienceDTO, Experience.class);
-    }
-
-    private ExperienceDTO mapToDto(Experience experience) {
-        return modelMapper.map(experience, ExperienceDTO.class);
-    }
-
-    private List<ExperienceDTO> mapListToDto(List<Experience> experienceList) {
-        return experienceList
-                .stream()
-                .map(element -> modelMapper.map(element, ExperienceDTO.class))
-                .collect(Collectors.toList());
     }
 }

@@ -1,6 +1,7 @@
 package com.jb.apijb.page;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @ToString
 @Getter
 @Setter
+@NoArgsConstructor
 public class Page {
 
     @Id
@@ -23,6 +25,6 @@ public class Page {
     @Column(name = "sub_title")
     private String subTitle;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", columnDefinition = "TEXT", nullable = false)
     private String description;
 }

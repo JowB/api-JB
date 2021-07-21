@@ -1,23 +1,20 @@
 package com.jb.apijb.menu;
 
+import com.jb.apijb.generic.GenericMappingService;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
-public class MenuService {
+public class MenuService extends GenericMappingService<MenuDTO, Menu> {
 
     private final MenuRepository menuRepository;
-    private final ModelMapper modelMapper;
 
-    @Autowired
     public MenuService(final MenuRepository menuRepository, final ModelMapper modelMapper) {
+        super(modelMapper);
         this.menuRepository = menuRepository;
-        this.modelMapper = modelMapper;
     }
 
     /**
@@ -26,7 +23,7 @@ public class MenuService {
      * @return list menuDTO
      */
     public List<MenuDTO> getAll() {
-        return this.mapListToDto(menuRepository.findAll());
+        return this.mapListToDto(menuRepository.findAll(), MenuDTO.class);
     }
 
     /**
@@ -46,7 +43,7 @@ public class MenuService {
      * @return menuDTO {@link MenuDTO}
      */
     public MenuDTO upsertMenu(MenuDTO menuDTO) {
-        return this.mapToDto(menuRepository.save(this.mapToEntity(menuDTO)));
+        return this.mapToDto(menuRepository.save(this.mapToEntity(menuDTO, Menu.class)), MenuDTO.class);
     }
 
     /**
@@ -56,20 +53,5 @@ public class MenuService {
      */
     public void deleteMenu(long id) {
         menuRepository.deleteById(id);
-    }
-
-    private Menu mapToEntity(MenuDTO menuDTO) {
-        return modelMapper.map(menuDTO, Menu.class);
-    }
-
-    private MenuDTO mapToDto(Menu menu) {
-        return modelMapper.map(menu, MenuDTO.class);
-    }
-
-    private List<MenuDTO> mapListToDto(List<Menu> menuList) {
-        return menuList
-                .stream()
-                .map(element -> modelMapper.map(element, MenuDTO.class))
-                .collect(Collectors.toList());
     }
 }

@@ -1,6 +1,5 @@
 package com.jb.apijb.contact;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +13,6 @@ public class ContactController {
 
     private final ContactService contactService;
 
-    @Autowired
     public ContactController(final ContactService contactService) {
         this.contactService = contactService;
     }

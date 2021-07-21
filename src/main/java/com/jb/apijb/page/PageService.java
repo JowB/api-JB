@@ -1,25 +1,22 @@
 package com.jb.apijb.page;
 
+import com.jb.apijb.generic.GenericMappingService;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
-public class PageService {
+public class PageService extends GenericMappingService<PageDTO, Page> {
 
     private final PageRepository pageRepository;
-    private final ModelMapper modelMapper;
 
-    @Autowired
     public PageService(final PageRepository pageRepository, final ModelMapper modelMapper) {
+        super(modelMapper);
         this.pageRepository = pageRepository;
-        this.modelMapper = modelMapper;
     }
 
     /**
@@ -28,7 +25,7 @@ public class PageService {
      * @return list pageDto
      */
     public List<PageDTO> getAllPages() {
-        return this.mapListToDto(pageRepository.findAll());
+        return this.mapListToDto(pageRepository.findAll(), PageDTO.class);
     }
 
     /**
@@ -42,7 +39,7 @@ public class PageService {
             Optional<Page> optionalPage = pageRepository.findById(id);
 
             if (optionalPage.isPresent()) {
-                PageDTO pageDTO = this.mapToDto(optionalPage.get());
+                PageDTO pageDTO = this.mapToDto(optionalPage.get(), PageDTO.class);
 
                 return new ResponseEntity<>(pageDTO, HttpStatus.OK);
             }
@@ -60,7 +57,7 @@ public class PageService {
      * @return pageDTO
      */
     public PageDTO upsertPage(PageDTO pageDTO) {
-        return this.mapToDto(pageRepository.save(this.mapToEntity(pageDTO)));
+        return this.mapToDto(pageRepository.save(this.mapToEntity(pageDTO, Page.class)), PageDTO.class);
     }
 
     /**
@@ -72,18 +69,4 @@ public class PageService {
         pageRepository.deleteById(id);
     }
 
-    private Page mapToEntity(PageDTO pageDTO) {
-        return modelMapper.map(pageDTO, Page.class);
-    }
-
-    private PageDTO mapToDto(Page page) {
-        return modelMapper.map(page, PageDTO.class);
-    }
-
-    private List<PageDTO> mapListToDto(List<Page> pageList) {
-        return pageList
-                .stream()
-                .map(element -> modelMapper.map(element, PageDTO.class))
-                .collect(Collectors.toList());
-    }
 }

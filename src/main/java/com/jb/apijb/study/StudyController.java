@@ -1,6 +1,5 @@
 package com.jb.apijb.study;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +13,6 @@ public class StudyController {
 
     private final StudyService studyService;
 
-    @Autowired
     public StudyController(final StudyService studyService) {
         this.studyService = studyService;
     }

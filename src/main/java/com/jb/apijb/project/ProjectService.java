@@ -1,23 +1,20 @@
 package com.jb.apijb.project;
 
+import com.jb.apijb.generic.GenericMappingService;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
-public class ProjectService {
+public class ProjectService extends GenericMappingService<ProjectDTO, Project> {
 
     private final ProjectRepository projectRepository;
-    private final ModelMapper modelMapper;
 
-    @Autowired
     public ProjectService(final ProjectRepository projectRepository, final ModelMapper modelMapper) {
+        super(modelMapper);
         this.projectRepository = projectRepository;
-        this.modelMapper = modelMapper;
     }
 
     /**
@@ -26,7 +23,7 @@ public class ProjectService {
      * @return list projectDto
      */
     public List<ProjectDTO> getAllProjects() {
-        return this.mapListToDto(projectRepository.findAll());
+        return this.mapListToDto(projectRepository.findAll(), ProjectDTO.class);
     }
 
     /**
@@ -46,7 +43,7 @@ public class ProjectService {
      * @return projectDTO from database {@link ProjectDTO}
      */
     public ProjectDTO upsertProject(ProjectDTO projectDTO) {
-        return this.mapToDto(projectRepository.save(this.mapToEntity(projectDTO)));
+        return this.mapToDto(projectRepository.save(this.mapToEntity(projectDTO, Project.class)), ProjectDTO.class);
     }
 
     /**
@@ -69,20 +66,5 @@ public class ProjectService {
      */
     public void deleteProject(long id) {
         projectRepository.deleteById(id);
-    }
-
-    private Project mapToEntity(ProjectDTO projectDTO) {
-        return modelMapper.map(projectDTO, Project.class);
-    }
-
-    private ProjectDTO mapToDto(Project project) {
-        return modelMapper.map(project, ProjectDTO.class);
-    }
-
-    private List<ProjectDTO> mapListToDto(List<Project> projectList) {
-        return projectList
-                .stream()
-                .map(element -> modelMapper.map(element, ProjectDTO.class))
-                .collect(Collectors.toList());
     }
 }
