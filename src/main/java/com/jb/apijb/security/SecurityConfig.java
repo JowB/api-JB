@@ -21,7 +21,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http
+                .csrf().disable()
+                .authorizeRequests()
                 .mvcMatchers(HttpMethod.GET, "/menu/**").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/pages/**").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/experiences/**").permitAll()
