@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = {"http://localhost:4200", "https://backoffice-jb.netlify.app/"})
+@CrossOrigin(origins = {"http://localhost:4200", "https://backoffice-jb.netlify.app"})
 @RestController
 public class PageController {
 
